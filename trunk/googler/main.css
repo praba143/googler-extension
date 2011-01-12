@@ -1,0 +1,137 @@
+h1 {
+    font-family: 'Cardo', serif;
+    color: #000000;
+    font-size: 80px;
+    text-align: center;
+    position: relative;
+    top: 100px;
+}
+
+div.Search_Form {
+    position: relative;
+    top: 100px;
+    text-align: center;
+}
+
+div.Search_Form input {
+    
+}
+
+div.Operators {
+    position: relative;
+    top: 90px;
+    text-align: center;
+    margin-left: -360px;
+}
+
+div.ResultsHeader {
+    position: relative;
+    top: 130px;
+    margin-right: 10px;
+    text-align: right;
+    font-size: 12px;
+}
+
+div.Results {
+    position: relative;
+    top: 130px;
+    text-indent: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 26px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #c8d6f0;
+}
+
+
+div.Filters {
+    position: relative;
+    margin-top: inherit ;
+    margin-right: 30px;
+    border-right-style: solid;
+    border-right-color: #c8d6f0;
+    border-right-width: 1px;
+    width: 250px;
+}
+
+div.Filters label {
+    font-weight: bold;
+}
+
+div.FilterType {
+    position: relative;
+    margin-left: 10px;
+    margin-top: 10px;
+    text-indent: 5px;
+    width: 200px;
+    line-height: 3;
+}
+
+div.FilterList {
+    position: relative;
+    margin-left: 30px;
+    line-height: 1.5;
+}
+
+div.Orders {
+    position: relative;
+    margin-top: inherit ;
+    margin-right: 30px;
+    border-top: 1px solid #c8d6f0;
+    width: 230px;
+    padding-top: 9px
+}
+
+div.Orders label {
+    font-weight: bold;
+}
+
+div.OrdersType {
+    position: relative;
+    margin-left: 10px;
+    line-height: 2;
+}
+
+div.ResultsList {
+    position: absolute;
+    top: 10px;
+    left: 250px;
+    border-left-style: solid;
+    border-left-color: #c8d6f0;
+    border-left-width: 1px;
+}
+
+div.ResultsEntry {
+    position: absolute;
+    top: 10px;
+    left: 250px;
+    border-left-style: solid;
+    border-left-color: #c8d6f0;
+    border-left-width: 1px;
+}
+
+div.ResultsEntryDesc {
+    position: relative;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+div.ResultsEntryLink {
+    position: relative;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #0D7649;
+}
+
+div.ResultsEntrySE {
+    position: relative;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #4171DA;
+}
+

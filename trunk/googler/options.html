@@ -1,0 +1,45 @@
+<html>
+	<script language="Javascript">
+
+
+/*xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET", "www.google.es",false)
+// xmlhttp.send( null );
+
+xmlhttp.onreadystatechange=function() {
+
+	alert(xmlhttp.readyState);
+	alert(xmlhttp.getAllResponseHeaders());
+	alert(xmlhttp.status);
+	alert(xmlhttp.statusText);
+
+  if (xmlhttp.readyState==4) {
+   alert(xmlhttp.responseText)
+  }
+ }
+ xmlhttp.send(null)*/
+
+
+
+
+var req = new XMLHttpRequest();  
+req.open('GET', 'http://www.mozilla.org/', true);  
+req.onreadystatechange = function (aEvt) {  
+  if (req.readyState == 4) {  
+     if(req.status == 200)  
+      dump(req.responseText);  
+     else  
+      dump("Error loading page\n");  
+  }  
+};  
+req.send(null);  
+
+
+
+
+
+
+
+
+	</script>
+</html>
