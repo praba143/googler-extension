@@ -1,0 +1,133 @@
+<html>
+
+    <head>
+        <title>googler v. 0.1</title>
+        <script src="configuration.js" type="text/javascript" ></script>
+        <script src="functionality.js" type="text/javascript" ></script>
+        <script src="GUI.js" type="text/javascript" ></script>
+        <link href="//fonts.googleapis.com/css?family=Cardo:regular" rel="stylesheet" type="text/css" >
+        <link rel="stylesheet" type="text/css" href="main.css" />
+    </head>
+
+    <body onload="on_load()">
+
+        <!-- Title Panel -->
+        <div id="Title">
+            <h1><span style="color:blue">g</span><span style="color:red">o</span><span style="color:#FFAA00">o</span><span style="color:blue">g</span><span style="color:green">l</span><span style="color:red">e</span><span style="color:blue">r</span></h1>
+        </div>
+
+        <!-- Top Panel -->
+        <div id="Top" class="Top">
+
+            <!-- Search Form -->
+            <div id="Search_Form" class="Search_Form">
+            <form name="search_form" action="javascript:startSearch()">
+                <!--<label>Query:</label>-->
+                <input name="query_tb" id="query_tb" type="text" size="70px" />
+                <input name="search_button" id="search_button" type="button" value="Search" onclick="startSearch()" />
+            </form>
+            </div>
+
+            <!-- Operators -->
+            <div id="Operators" class="Operators">
+                <label>Operators:</label>&nbsp;&nbsp;
+                <a href="javascript:updateQueryBox('site:')" title="Search inside a domain (eg: site:domain.com)">site:</a>&nbsp;&nbsp;
+                <a href="javascript:updateQueryBox('inurl:')" title="Search inside the URL (eg: inurl:blog.php)">inurl:</a>&nbsp;&nbsp;
+                <a href="javascript:updateQueryBox('intitle:')" title="Search in the title (eg: intitle:index.of)">intitle:</a>&nbsp;&nbsp;
+                <a href="javascript:updateQueryBox('filetype:')" title="Search for a specific file type (eg: filetype:pdf)">filetype:</a>&nbsp;&nbsp;
+                <!--<a href="javascript:updateQueryBox('ip:')">ip:</a>-->
+            </div>
+
+        </div>
+
+        <!-- Bottom Panel -->
+        <div id="Bottom" > <!--style="display:none">-->
+
+            <div id="ResultsHeader" class="ResultsHeader">
+                <label id="ResultsHeader_lb"></label>
+            </div>
+
+            <!-- Results -->
+            <div id="Results" class="Results">
+                <!--<label>Results:</label>-->
+
+                <div id="Filters" class="Filters">
+                    <div onclick="showHideLateralPanel('FiltersPanel', 'FilterIcon')">
+                        <label>Filters</label>
+                        <img name="FilterIcon" id="FilterIcon" src="expand.gif">
+                    </div>
+                    <div id="FiltersPanel" style="display:none">
+                        <div id="ParamsFilter" style="display:none" class="FilterType">
+                            <label>Parameters:</label>
+                            <div id="ParamsFilterFilters" class="FilterList">
+                                <div class><input name="params_with" id="params_with" type="checkbox" checked="true" onclick="applyFilters()">WITH parameters</input></div>
+                                <div class><input name="params_without" id="params_without" type="checkbox" checked="true" onclick="applyFilters()">WITHOUT parameters</input></div>
+                            </div>
+                        </div>
+
+                        <div id="ProtocolFilter" style="display:none" class="FilterType">
+                            <label>Protocols:</label>
+                            <div id="ProtocolFilterFilters" class="FilterList">
+                            </div>
+                        </div>
+
+                        <div id="ExtensionFilter" style="display:none" class="FilterType">
+                            <label>Extensions:</label>
+                            <div id="ExtensionFilterFilters" class="FilterList">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sort by options -->
+                <div id="SortBy" class="Orders">
+                    <div onclick="showHideLateralPanel('OrderByPanel', 'OrderByIcon')">
+                        <label>Order by</label>
+                        <img name="OrderByIcon" id="OrderByIcon" src="expand.gif">
+                    </div>
+                    <div id="OrderByPanel" style="display:none" class="FilterList">
+                        <div class="OrdersType"><input type="radio" name="Orderby_rb" id="Orderby_ranking" checked onchange="updateShowedResults()">Ranking</div>
+                        <div class="OrdersType"><input type="radio" name="Orderby_rb" id="Orderby_alphabetical" onchange="updateShowedResults()">Alphabetical (by URL)</div>
+                    </div>
+                </div>
+
+                <!-- Show options -->
+                <div id="InfoShowed" class="Orders">
+                    <div onclick="showHideLateralPanel('InfoShowedPanel', 'InfoShowedIcon')">
+                        <label>Information showed</label>
+                        <img name="InfoShowedIcon" id="InfoShowedIcon" src="expand.gif">
+                    </div>
+                    <div id="InfoShowedPanel" style="display:none" class="FilterList">
+                        <div class="OrdersType"><input type="radio" name="InfoShowed_rb" id="InfoShowed_description" checked onchange="showResults(_sortedResults)">Description and URL</div>
+                        <div class="OrdersType"><input type="radio" name="InfoShowed_rb" id="InfoShowed_url" onchange="showResults(_sortedResults)">Only URL</div>
+                    </div>
+                </div>
+
+                <!-- Results List -->
+                <div id="ResultsList" class="ResultsList">
+                    <!--<div><input name="url_cb_0" id="url_cb_0" type="checkbox" /><a id="url_0" href="javascript:openLink('URL')">URL0</a></div>
+                    <div><input name="url_cb_1" id="url_cb_1" type="checkbox" /><a id="url_1" href="javascript:openLink('URL')">URL1</a></div>
+                    <div><input name="url_cb_3" id="url_cb_3" type="checkbox" /><a id="url_3" href="javascript:openLink('URL')">Título</a>
+                        <div class="ResultsEntryDesc">descripci&oacute;n de varias l&iacute;neas............... ................... ................... ................... ................... ................... ................... ................... ................... ................... ................... ................... ................... ...................</div>
+                        <div class="ResultsEntryLink">http://URL<label style="color: #4171DA;"> - [Google]</label></div>
+                    </div>
+                    <div><input name="url_cb_3" id="url_cb_3" type="checkbox" /><a id="url_3" href="javascript:openLink('URL')">Título</a>
+                        <div class="ResultsEntryDesc"><em>Javascript</em> es un lenguaje de programación interpretado dialecto del estándar ECMAScript. Se define como orientado a objetos , basado en prototipos, </div>
+                        <div class="ResultsEntryLink">http://URL<label style="color: #4171DA;"> - [Bing]</label></div>
+                    </div>
+                    <div><input name="url_cb_2" id="url_cb_2" type="checkbox" /><a id="url_2" href="javascript:openLink('URL')">URL2</a></div>
+                    -->
+                </div>
+
+                <!--<div id="OpenSelected">
+                    <input name="open_selected_button" id="open_selected_button" type="button" value="Open selected links" onclick="open_selected_links()" />
+                </div>-->
+
+
+            </div>
+
+        </div>
+
+    </body>
+
+</html>

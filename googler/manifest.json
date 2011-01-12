@@ -1,0 +1,16 @@
+{
+  "name": "googler",
+  "version": "0.1",
+  "description": "Automate Google searches.",
+  "background_page": "launcher.html",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_title": "googler"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "tabs",
+    "http://www.google.com/",
+    "http://www.bing.com/"
+  ]
+}
