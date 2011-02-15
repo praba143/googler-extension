@@ -4,8 +4,11 @@
   "description": "Automate Google searches.",
   "background_page": "launcher.html",
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "googler_icon16.gif",
     "default_title": "googler"
+  },
+  "icons": { 
+          "128": "googler_icon128.gif" 
   },
   "options_page": "options.html",
   "permissions": [
