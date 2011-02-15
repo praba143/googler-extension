@@ -20,16 +20,21 @@ _sortedResults = [];
  * File filters
  */
 //filters_extension = ['asp', 'html', 'txt'];
-//_filters_protocol = ['http', 'https'];
-//_filters_parameters = ['with', 'without'];
-_filters_extension = [];
-_filters_protocol = [];
-_filters_parameters = [];
+//_filtersProtocol = ['http', 'https'];
+//_filtersParameters = ['with', 'without'];
+_filtersExtension = [];
+_filtersProtocol = [];
+_filtersParameters = [];
 
 /**
  * List of User-Agents
  */
-_user_agents = [];
+_userAgents = [];
+
+/**
+ * Custom Tab ID
+ */
+_currentTabID = -1;
 
 
 /***************************************
@@ -39,21 +44,87 @@ RANKING_ORDER = 1;
 ALPHABETICAL_ORDER = 2;
 
 
+/***************************************
+ *              Methods                *
+ ***************************************/
+
 /**
  * Read initial information from configuration file
  */
 function on_load () {
+
+    // Save the current Tab ID
+    chrome.tabs.getCurrent(function (tab) { _currentTabID = tab.id; });
+
+
     // Get engines information file
-    //alert (chrome.extension.getURL('data/engines.xml'));
-    //sendHTTPRequest (chrome.extension.getURL('data/engines.xml'), loadConfiguration);
     loadConfiguration();
 
+
     // Load an User-Agent list
-    sendHTTPRequest (chrome.extension.getURL('data/UA.txt'), loadUserAgents, "");
+    //sendHTTPRequest (chrome.extension.getURL('data/UA.txt'), loadUserAgents, "");
+
+
+    // Configure SE Cookies
+    if (!chrome.cookies) {
+          chrome.cookies = chrome.experimental.cookies;
+    }
+
+
+    // Todas las cookies
+    chrome.cookies.getAll({}, function(cookies) {
+        for (var i in cookies) {
+          alert (cookies[i].domain + "\n" + cookies[i].storeId + "\n" + cookies[i].path + "\n" + cookies[i].session + "\n" + cookies[i].name + "=" + cookies[i].value);
+        }
+    });
+
+
+    // Todos los CookieStores
+    chrome.cookies.getAllCookieStores ( function(cs) {
+        for (var i in cs) {
+          alert (cs[i].id + "\n" + cs[i].tabIds);
+        }
+    });
+
+    while ( _currentTabID < 0 ) 
+    alert ("current: " + _currentTabID);
+
+
+
+//    for ( var se in _searchEngines ) {
+//        configureCookies ( _searchEngines[se] );
+//    }
+
 
     // Give focus to query textbox
     document.forms[0].query_tb.focus();
 }
+
+
+/**********************************************
+*              Cookies Tasks                  *
+***********************************************/
+
+/**
+ * Configure SE Cookies
+ */
+function configureCookies (se) {
+
+
+//    chrome.cookies.remove({"url": "http://www.bing.com", "name": "SRCHUID"});
+//    chrome.cookies.remove({"url": "http://www.bing.com", "name": "SRCHUSR"});
+//    chrome.cookies.remove({"url": "http://www.bing.com", "name": "MUID"});
+//    chrome.cookies.remove({"url": "http://www.bing.com", "name": "ANON"});
+//    chrome.cookies.remove({"url": "http://www.bing.com", "name": "NAP"});
+//    chrome.cookies.remove({"url": "http://www.bing.com", "name": "SRCHD"});
+//    chrome.cookies.remove({"url": "http://www.bing.com", "name": "_UR"});
+//    chrome.cookies.remove({"url": "http://www.bing.com", "name": "_SS"});
+//    chrome.cookies.remove({"url": "http://www.bing.com", "name": "RMS"});
+
+}
+
+
+
 
 
 /**********************************************
@@ -64,15 +135,15 @@ function on_load () {
  * Load an User-Agent list on memory
  */
 function loadUserAgents (response, params) {
-    _user_agents = response.split ("\n");
-    _user_agents.pop();
+    _userAgents = response.split ("\n");
+    _userAgents.pop();
 }
 
 /**
  * Return a random User-Agent
  */
 function getUserAgent () {
-    return _user_agents[Math.ceil(Math.random()*_user_agents.length)-1];
+    return _userAgents[Math.ceil(Math.random()*_userAgents.length)-1];
 }
 
 /**********************************************
@@ -85,17 +156,17 @@ function getUserAgent () {
 function startSearch () {
     // Initialize global variables
     _results = [];
-    _filters_extension = [];
-    _filters_protocol = [];
-    _filters_parameters = [];
+    _filtersExtension = [];
+    _filtersProtocol = [];
+    _filtersParameters = [];
     printFilters ();
 
     // Show Bottom Panel
     document.getElementById("Bottom").style.display = "inline";
 
     // Search for each search engine configured
-    for ( var se_idx in search_engines ) {
-        var se = search_engines[se_idx];
+    for ( var se_idx in _searchEngines ) {
+        var se = _searchEngines[se_idx];
         var se_results = [];
 
         getSearchEngineResults ( se, se_results, 0 );
@@ -164,42 +235,35 @@ function extractResults (response, params) {
 
             // Get the differents filters
             var urlparts = getURLParts (item.url);
-            if ( urlparts["extension"].length > 0 && _filters_extension.indexOf(urlparts["extension"]) < 0 ) {
-                _filters_extension.push ( urlparts["extension"] );
-                _filters_extension.sort();
+            if ( urlparts["extension"].length > 0 && _filtersExtension.indexOf(urlparts["extension"]) < 0 ) {
+                _filtersExtension.push ( urlparts["extension"] );
+                _filtersExtension.sort();
             }
-            if ( urlparts["protocol"].length > 0 && _filters_protocol.indexOf(urlparts["protocol"]) < 0 )
-                _filters_protocol.push ( urlparts["protocol"] );
-            if ( urlparts["params"].length > 0 && _filters_parameters.indexOf("with") < 0 )
-                _filters_parameters.push ( "with" );
-            if ( urlparts["params"].length == 0 && _filters_parameters.indexOf("without") < 0 )
-                _filters_parameters.push ( "without" );
+            if ( urlparts["protocol"].length > 0 && _filtersProtocol.indexOf(urlparts["protocol"]) < 0 )
+                _filtersProtocol.push ( urlparts["protocol"] );
+            if ( urlparts["params"].length > 0 && _filtersParameters.indexOf("with") < 0 )
+                _filtersParameters.push ( "with" );
+            if ( urlparts["params"].length == 0 && _filtersParameters.indexOf("without") < 0 )
+                _filtersParameters.push ( "without" );
         }
     }
 
     // There were more results
     if (mustcontinue) {
+        //alert (items.length + " - " + se["Name"]);
         se_start += items.length;
         getSearchEngineResults (se, se_results, se_start);
 
         _results[se["Name"]] = se_results; // TODO: PONER ANTES DE LA LLAMADA ANTERIOR
         updateShowedResults ();
-//        mixResults (se_results);
-//        showResults ( _results );
         printFilters ();
     }
     // There wasn't any different result
-    else {
-        _results[se["Name"]] = se_results; // TODO: PONER ANTES DE LA LLAMADA ANTERIOR
-        updateShowedResults ();
-
+//    else {
         //_results[se["Name"]] = se_results;
         //updateShowedResults ();
-
-//        mixResults (se_results);
-//        showResults ( _results );
-        printFilters ();
-    }
+//        printFilters ();
+//    }
 }
 
 /**
@@ -271,26 +335,6 @@ function updateShowedResults () {
     // Print results
     showResults ( _sortedResults );
 }
-
-
-/**
- * Mix results
- *
-function mixResults (se_results) {
-    if ( _results.length == 0 )
-        _results = se_results;
-    else {
-        for ( var i=0 ; i<se_results ; i++ ) {
-            if ( _results.indexOf(se_results[i]) < 0 ) {
-                _results.push(se_results[i]);
-            }
-        }
-    }
-    _results.sort();
-}*/
-
-
-
 
 /**********************************************
 *                HTTP Requests                *
@@ -416,9 +460,9 @@ function applyFilters () {
         var mustbeadded = false;
 
         // Apply PROTOCOL filter
-        for ( var pf in _filters_protocol ) {
-            if ( document.getElementById("protocol_" + _filters_protocol[pf]).checked &&
-                urlparts["protocol"] == _filters_protocol[pf] ) {
+        for ( var pf in _filtersProtocol ) {
+            if ( document.getElementById("protocol_" + _filtersProtocol[pf]).checked &&
+                urlparts["protocol"] == _filtersProtocol[pf] ) {
                     mustbeadded = true;
                     break; // It's not possible 2 protocols in the same URL
                 }
@@ -442,9 +486,9 @@ function applyFilters () {
 
         if ( mustbeadded ) {
             // Apply EXTENSION filter
-            for ( var ef in _filters_extension ) {
-                if ( urlparts["extension"] == _filters_extension[ef] ) {
-                    if ( document.getElementById("extension_" + _filters_extension[ef]).checked ) {
+            for ( var ef in _filtersExtension ) {
+                if ( urlparts["extension"] == _filtersExtension[ef] ) {
+                    if ( document.getElementById("extension_" + _filtersExtension[ef]).checked ) {
                         mustbeadded = true;
                         break; // It's not possible 2 extensions in the same URL
                     }

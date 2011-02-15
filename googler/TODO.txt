@@ -13,6 +13,8 @@
 
 * Comprobar los operadores y los buscadores utilizados (si son o no compatible cada operador con los buscadores utilizados)
 
+* Filtrar por motor de búsqueda
+
 
 Bing:
 

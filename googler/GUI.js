@@ -97,14 +97,14 @@ function changeState (id) {
  */
 function printFilters () {
     // Parameter filter
-    if ( _filters_parameters.length == 2 )
+    if ( _filtersParameters.length == 2 )
         // Show params filter
         document.getElementById("ParamsFilter").style.display = 'inline';
     else
         document.getElementById("ParamsFilter").style.display = 'none';
 
     // Protocol filter
-    if ( _filters_protocol.length > 0 ) {
+    if ( _filtersProtocol.length > 0 ) {
         // Show protocols filter
         document.getElementById("ProtocolFilter").style.display = 'inline';
 
@@ -112,18 +112,18 @@ function printFilters () {
         var protocol_line = '<input name="protocol_FILTER" id="protocol_FILTER" type="checkbox" checked="true" onclick="applyFilters()">FILTER</input>';
         var protocol_div = document.getElementById('ProtocolFilterFilters');
         protocol_div.innerHTML = "";
-        for ( var fp in _filters_protocol ) {
+        for ( var fp in _filtersProtocol ) {
             var newdivp = document.createElement('div');
-            newdivp.setAttribute("name", "protocol_filter_" + _filters_protocol[fp]);
-            newdivp.innerHTML = protocol_line.replace(/FILTER/g, _filters_protocol[fp]);
+            newdivp.setAttribute("name", "protocol_filter_" + _filtersProtocol[fp]);
+            newdivp.innerHTML = protocol_line.replace(/FILTER/g, _filtersProtocol[fp]);
 
 //            var newdivp = document.createElement('input');
-//            newdivp.setAttribute("name", "protocol_" + _filters_protocol[fp]);
-//            newdivp.setAttribute("id", "protocol_" + _filters_protocol[fp]);
+//            newdivp.setAttribute("name", "protocol_" + _filtersProtocol[fp]);
+//            newdivp.setAttribute("id", "protocol_" + _filtersProtocol[fp]);
 //            newdivp.setAttribute("type", "checkbox");
 //            newdivp.setAttribute("checked", "true");
 //            newdivp.setAttribute("onclick", "applyFilters()");
-//            newdivp.innerHTML = _filters_protocol[fp];
+//            newdivp.innerHTML = _filtersProtocol[fp];
 
             protocol_div.appendChild(newdivp);
         }
@@ -132,7 +132,7 @@ function printFilters () {
         document.getElementById("ProtocolFilter").style.display = 'none';
 
     // Protocol filter
-    if ( _filters_extension.length > 0 ) {
+    if ( _filtersExtension.length > 0 ) {
         // Show protocols filter
         document.getElementById("ExtensionFilter").style.display = 'inline';
 
@@ -140,10 +140,10 @@ function printFilters () {
         var extension_line = '<input name="extension_FILTER" id="extension_FILTER" type="checkbox" checked="true" onclick="applyFilters()">FILTER</input>';
         var extension_div = document.getElementById('ExtensionFilterFilters');
         extension_div.innerHTML = "";
-        for ( var fe in _filters_extension ) {
+        for ( var fe in _filtersExtension ) {
             var newdive = document.createElement('div');
-            newdive.setAttribute("name", "protocol_filter_" + _filters_extension[fe]);
-            newdive.innerHTML = extension_line.replace(/FILTER/g, _filters_extension[fe]);
+            newdive.setAttribute("name", "protocol_filter_" + _filtersExtension[fe]);
+            newdive.innerHTML = extension_line.replace(/FILTER/g, _filtersExtension[fe]);
 
             extension_div.appendChild(newdive);
         }
@@ -158,7 +158,7 @@ function printFilters () {
  */
 function showHideLateralPanel(panelID, iconID) {
     var div = document.getElementById(panelID);
-    if ( div.style.display == "none" ) { //&& (_filters_extension.length > 0 || _filters_protocol.length > 0 || _filters_parameters.length > 0) ) {
+    if ( div.style.display == "none" ) { //&& (_filtersExtension.length > 0 || _filtersProtocol.length > 0 || _filtersParameters.length > 0) ) {
         div.style.display = "inline";
         document.getElementById(iconID).src = "collapse.png";
     }
