@@ -62,7 +62,7 @@ function on_load () {
 
 
     // Load an User-Agent list
-    //sendHTTPRequest (chrome.extension.getURL('data/UA.txt'), loadUserAgents, "");
+    sendHTTPRequest (chrome.extension.getURL('data/UA.txt'), loadUserAgents, "");
 
 
     // Configure SE Cookies
@@ -74,7 +74,7 @@ function on_load () {
     // Todas las cookies
     chrome.cookies.getAll({}, function(cookies) {
         for (var i in cookies) {
-          alert (cookies[i].domain + "\n" + cookies[i].storeId + "\n" + cookies[i].path + "\n" + cookies[i].session + "\n" + cookies[i].name + "=" + cookies[i].value);
+          //alert (cookies[i].domain + "\n" + cookies[i].storeId + "\n" + cookies[i].path + "\n" + cookies[i].session + "\n" + cookies[i].name + "=" + cookies[i].value);
         }
     });
 
@@ -82,7 +82,7 @@ function on_load () {
     // Todos los CookieStores
     chrome.cookies.getAllCookieStores ( function(cs) {
         for (var i in cs) {
-          alert (cs[i].id + "\n" + cs[i].tabIds);
+          //alert (cs[i].id + "\n" + cs[i].tabIds);
         }
     });
 
@@ -361,7 +361,7 @@ function sendHTTPRequest (request, callback, params) {
 
 
     xhr.open("GET", request, true);
-    xhr.setRequestHeader("User-Agent" , getUserAgent());
+    xhr.setRequestHeader("User-Agent2" , getUserAgent());
     //xhr.setRequestHeader('User-Agent','Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chroma/8.0.552.224 Safari/534.10');
 //    chrome.cookies.remove({"url": "http://www.google.com", "name": "SS"});
 //    chrome.cookies.remove({"url": "http://www.google.com", "name": "SID"});
