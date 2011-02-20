@@ -13,6 +13,7 @@ function updateQueryBox(value) {
  * Create results list
  */
 function showResults (tmpresults) {
+    document.getElementById("LicensePanel").style.display = "none";
 
     // Clear ResultsList
     var rl_div = document.getElementById('ResultsList');
@@ -21,7 +22,7 @@ function showResults (tmpresults) {
     // Show URL and description
     if ( document.getElementById("InfoShowed_description").checked ) {
 
-        var longline = '<input name="url_cb_NUMBER" id="url_cb_NUMBER" type="checkbox" /><a id="url_NUMBER" href="javascript:openLink(\'URL\')">TITLE</a><div class="ResultsEntryDesc">DESCRIPTION</div><div class="ResultsEntryLink">URL<label style="color: #4171DA;"> - [SEARCHENGINE]</label></div>';
+        var longline = /*'<input name="url_cb_NUMBER" id="url_cb_NUMBER" type="checkbox" />*/'<a id="url_NUMBER" href="javascript:openLink(\'URL\')">TITLE</a><div class="ResultsEntryDesc">DESCRIPTION</div><div class="ResultsEntryLink">URL<label style="color: #4171DA;"> - [SEARCHENGINE]</label></div>';
 
         for ( var res1 in tmpresults ) {
             var newdiv = document.createElement('div');
@@ -36,11 +37,12 @@ function showResults (tmpresults) {
     // Show only URL
     else {
 
-        var shortline = '<input name="url_cb_NUMBER" id="url_cb_NUMBER" type="checkbox" /><a id="url_NUMBER" href="javascript:openLink(\'URL\')">URL</a>';
+        var shortline = /*'<input name="url_cb_NUMBER" id="url_cb_NUMBER" type="checkbox" />*/'<a id="url_NUMBER" href="javascript:openLink(\'URL\')">URL</a>';
 
         for ( var res2 in tmpresults ) {
             var newdiv = document.createElement('div');
             newdiv.setAttribute("name", "line_" + res2);
+            newdiv.setAttribute("class", "ResultsEntryLink")
             newdiv.innerHTML = shortline.replace(/NUMBER/g, res2).replace(/URL/g, tmpresults[res2].url);
 
             rl_div.appendChild(newdiv);
@@ -54,6 +56,7 @@ function showResults (tmpresults) {
 
     // Update Results number
     document.getElementById("ResultsHeader").innerHTML = tmpresults.length + " showed results from " + total;
+        document.getElementById("LicensePanel").style.display = "inline";
 }
 
 /**
@@ -96,6 +99,7 @@ function changeState (id) {
  * Show filters
  */
 function printFilters () {
+    document.getElementById("RepeatedFilter").style.display = 'inline';
     // Parameter filter
     if ( _filtersParameters.length == 2 )
         // Show params filter
@@ -160,11 +164,11 @@ function showHideLateralPanel(panelID, iconID) {
     var div = document.getElementById(panelID);
     if ( div.style.display == "none" ) { //&& (_filtersExtension.length > 0 || _filtersProtocol.length > 0 || _filtersParameters.length > 0) ) {
         div.style.display = "inline";
-        document.getElementById(iconID).src = "collapse.png";
+        document.getElementById(iconID).src = "images/collapse.png";
     }
     else {
         div.style.display = "none";
-        document.getElementById(iconID).src = "expand.gif";
+        document.getElementById(iconID).src = "images/expand.gif";
     }
 }
 
