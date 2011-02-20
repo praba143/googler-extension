@@ -36,6 +36,10 @@ _userAgents = [];
  */
 _currentTabID = -1;
 
+/**
+ * Cookies
+ */
+_cookies = [];
 
 /***************************************
  *              Constants              *
@@ -62,7 +66,7 @@ function on_load () {
 
 
     // Load an User-Agent list
-    sendHTTPRequest (chrome.extension.getURL('data/UA.txt'), loadUserAgents, "");
+    //sendHTTPRequest (chrome.extension.getURL('data/UA.txt'), loadUserAgents, "");
 
 
     // Configure SE Cookies
@@ -74,7 +78,21 @@ function on_load () {
     // Todas las cookies
     chrome.cookies.getAll({}, function(cookies) {
         for (var i in cookies) {
-          //alert (cookies[i].domain + "\n" + cookies[i].storeId + "\n" + cookies[i].path + "\n" + cookies[i].session + "\n" + cookies[i].name + "=" + cookies[i].value);
+//          alert (cookies[i].name + "\n" + cookies[i].domain + "\n" + cookies[i].storeId + "\n" + cookies[i].path + "\n" + cookies[i].session + "\n" + cookies[i].name + "=" + cookies[i].value);
+          //saveCookie (cookies[i]);
+//          _cookies.push (cookies[i]);
+//
+//          var url = "http" + (cookies[i].secure ? "s" : "") + "://" + cookies[i].domain + cookies[i].path;
+//          chrome.cookies.remove({"url": url, "name": cookies[i].name});
+//          alert ("borrada");
+//          for (var se in _searchEngines) {
+//              if ( cookies[i].domain.indexOf( getURLParts(_searchEngines[se]["URL"])["domain"] ) >= 0 ) {
+//                  alert (_searchEngines[se]["URL"] +" "+ cookies[i].name +" "+ cookies[i].storeId);
+//                  chrome.cookies.remove( {"url" : _searchEngines[se]["URL"], "name" : cookies[i].name, "storeId" : cookies[i].storeId} );
+//                  alert ("borrada");
+//              }
+//          }
+          //chrome.cookies.remove( {"url" : , "name" : cookies[i].name, "storeId" : cookies[i].storeId} );
         }
     });
 
@@ -86,8 +104,8 @@ function on_load () {
         }
     });
 
-    while ( _currentTabID < 0 ) 
-    alert ("current: " + _currentTabID);
+  //  while ( _currentTabID < 0 )
+  //  alert ("current: " + _currentTabID);
 
 
 
@@ -123,8 +141,25 @@ function configureCookies (se) {
 
 }
 
+function saveCookie (cookie) {
+
+    _cookies.push (cookie);
 
 
+}
+
+function restoreCookies (se) {
+
+//    if ( se["URL"] )
+
+//    chrome.cookies.set({"url" : "http://www.testing.com", "domain" :
+//"www.testing.com", "name" : "name1", "value": "value1", "path" : "/"})
+//{"url" : "", "name" : "", "value" : "", "domain" : "", "path" : "", "secure" : "", "httpOnly" : "", "expirationDate" : "", "storeId" : ""}
+    for (var cookie in _cookies) {
+        chrome.cookies.set (cookie);
+    }
+
+}
 
 
 /**********************************************
@@ -208,9 +243,9 @@ function extractResults (response, params) {
         var total = 0;
         for ( var j in _results )
             total += _results[j].length;
-        alert ("total: " + total + "\ntotal orden: " + _sortedResults.length);
+        //alert ("total: " + total + "\ntotal orden: " + _sortedResults.length);
         
-        _results[se["Name"]] = se_results; // TODO: PONER ANTES DE LA LLAMADA ANTERIOR
+        _results[se["Name"]] = se_results;
         updateShowedResults ();
 
         //updateShowedResults ();
@@ -255,8 +290,8 @@ function extractResults (response, params) {
         getSearchEngineResults (se, se_results, se_start);
 
         _results[se["Name"]] = se_results; // TODO: PONER ANTES DE LA LLAMADA ANTERIOR
-        updateShowedResults ();
         printFilters ();
+        updateShowedResults ();
     }
     // There wasn't any different result
 //    else {
@@ -332,8 +367,9 @@ function updateShowedResults () {
     else
         mergeResults (ALPHABETICAL_ORDER);
 
+    applyFilters ();
     // Print results
-    showResults ( _sortedResults );
+    //showResults ( _sortedResults );
 }
 
 /**********************************************
@@ -361,7 +397,7 @@ function sendHTTPRequest (request, callback, params) {
 
 
     xhr.open("GET", request, true);
-    xhr.setRequestHeader("User-Agent2" , getUserAgent());
+    //xhr.setRequestHeader("User-Agent2" , getUserAgent());
     //xhr.setRequestHeader('User-Agent','Mozilla/5.0 (X11; U; Linux x86_64; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chroma/8.0.552.224 Safari/534.10');
 //    chrome.cookies.remove({"url": "http://www.google.com", "name": "SS"});
 //    chrome.cookies.remove({"url": "http://www.google.com", "name": "SID"});
@@ -454,14 +490,14 @@ function applyFilters () {
     var sr = [];
 
     // Apply filter
-    for ( var res in _results ) {
+    for ( var res in _sortedResults ) {
         // Analyze the URL
-        var urlparts = getURLParts (_results[res].url);
+        var urlparts = getURLParts (_sortedResults[res].url);
         var mustbeadded = false;
 
         // Apply PROTOCOL filter
         for ( var pf in _filtersProtocol ) {
-            if ( document.getElementById("protocol_" + _filtersProtocol[pf]).checked &&
+           if ( document.getElementById("protocol_" + _filtersProtocol[pf]).checked &&
                 urlparts["protocol"] == _filtersProtocol[pf] ) {
                     mustbeadded = true;
                     break; // It's not possible 2 protocols in the same URL
@@ -498,8 +534,13 @@ function applyFilters () {
             }
         }
 
-        if ( mustbeadded )
-            sr.push(_results[res]);
+        if ( mustbeadded ) {
+            // Repeated Filter
+            if ( document.getElementById("show_repeated").checked )
+                sr.push(_sortedResults[res]);
+            else if ( getIndexOf(sr, _sortedResults[res].url) < 0 )
+                sr.push(_sortedResults[res]);
+        }
     }
 
     // Show results
