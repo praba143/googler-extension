@@ -161,11 +161,11 @@ function showHideLateralPanel(panelID, iconID) {
     var div = document.getElementById(panelID);
     if ( div.style.display == "none" ) { //&& (_filtersExtension.length > 0 || _filtersProtocol.length > 0 || _filtersParameters.length > 0) ) {
         div.style.display = "inline";
-        document.getElementById(iconID).src = "images/collapse.png";
+        document.getElementById(iconID).src = "./collapse.png";
     }
     else {
         div.style.display = "none";
-        document.getElementById(iconID).src = "images/expand.gif";
+        document.getElementById(iconID).src = "./expand.gif";
     }
 }
 
