@@ -13,8 +13,6 @@ function updateQueryBox(value) {
  * Create results list
  */
 function showResults (tmpresults) {
-    document.getElementById("LicensePanel").style.display = "none";
-
     // Clear ResultsList
     var rl_div = document.getElementById('ResultsList');
     rl_div.innerHTML = "";
@@ -56,7 +54,6 @@ function showResults (tmpresults) {
 
     // Update Results number
     document.getElementById("ResultsHeader").innerHTML = tmpresults.length + " showed results from " + total;
-        document.getElementById("LicensePanel").style.display = "inline";
 }
 
 /**
