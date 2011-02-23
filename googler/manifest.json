@@ -10,7 +10,6 @@
   "icons": { 
           "128": "googler_icon128.gif" 
   },
-  "options_page": "options.html",
   "permissions": [
     "tabs",
     "cookies",

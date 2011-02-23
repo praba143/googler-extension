@@ -1,6 +1,0 @@
-inurl:(service|authors|administrators|users) ext:pwd "# -FrontPage-"
-inurl:(service|authors|administrators|users) ext:pwd
-intitle:index.of
-filetype:xls | filetype:doc | filetype:txt | filetype:docx | filetype:xlsx
-filetype:php~ | filetype:jsp~ | filetype:old | filetype:bak | filetype:backup
--ext:html -ext:htm -ext:shtml -ext:asp -ext:php -ext:aspx -ext:jsp

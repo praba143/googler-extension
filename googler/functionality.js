@@ -60,6 +60,8 @@ function on_load () {
     // Save the current Tab ID
     chrome.tabs.getCurrent(function (tab) { _currentTabID = tab.id; });
 
+    // Show the License Panel
+    document.getElementById("LicensePanel").style.display = "display";
 
     // Get engines information file
     loadConfiguration();
@@ -195,6 +197,10 @@ function startSearch () {
     _filtersProtocol = [];
     _filtersParameters = [];
     printFilters ();
+
+    // Hide License Panel
+    document.getElementById("LicensePanel").style.display = "none";
+
 
     // Show Bottom Panel
     document.getElementById("Bottom").style.display = "inline";
