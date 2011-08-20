@@ -28,7 +28,7 @@ function loadGoogleInfo () {
     info["Operators"] = ["allinanchor", "allintext", "allintitle", "allinurl", "cache", "define", "filetype", "id", "inanchor", "info", "intext", "intitle", "inurl", "link", "phonebook", "related", "site"];
 
     //info["Regexp"] = '<div class=vsc sig=[^>]*?><span class=tl><h3 class="r"><a href="[^"]*?" class=l onmousedown="[^"]*?">.*?</a></h3><button class=ws title=""></button><button class=vspib></button>.*?</span><div class="s">.*?<span class=f><cite>.*?</cite> - <span class=gl><a href="[^"]*?" onmousedown="[^"]*?">';
-    info["Regexp"] = 'class=vsc.*?</cite>';
+    info["Regexp"] = '<!--m-->.*?<!--n-->';
 
     //info["RegexpURL"] = '<a href="[^"]*?" class=l';
     info["ExtractURL"] = function (data) {
@@ -52,10 +52,10 @@ function loadGoogleInfo () {
 
     //info["RegexpDesc"] = '</span><div class="s">.*?<br><span';
     info["ExtractDesc"] = function (data) {
-        var pattern = new RegExp ('</span><div class="s">.*?<br><span', "gi");
+        var pattern = new RegExp ('class=st>.*?</span>', "gi");
         var res = data.match(pattern);
         if ( res )
-            return res[0].substring (22, res[0].length-9);
+            return res[0].substring (9, res[0].length-7);
         else
             return "";
     }
@@ -79,7 +79,7 @@ function loadBingInfo () {
     info["Operators"] = ["contains", "filetype", "inanchor", "inbody", "intitle", "ip", "language", "location", "prefer", "site", "feed", "hasfeed"];
 
     //info["Regexp"] = '<div class="sa_cc"><div class="sb_tlst"><h3><a href="[^"]*?" onmousedown="[^"]*?">.*?</a></h3></div>.*?<div class="sb_meta"><cite>';
-    info["Regexp"] = '<div class="sa_cc"><div class="sb_tlst">.*?<cite>';
+    info["Regexp"] = 'class="sa_wr">.*?</li>';
     
     //info["RegexpURL"] = '<h3><a href="[^"]*?" onmousedown';
     info["ExtractURL"] = function (data) {
